@@ -14,7 +14,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun FrontViewPage(onGazeClick: () -> Unit, onGestureClick: () -> Unit, onMotionClick: () -> Unit, onSpeechRecognitionClick: () -> Unit) {
+fun FrontViewPage(
+    onGazeClick: () -> Unit,
+    onGestureClick: () -> Unit,
+    onMotionClick: () -> Unit,
+    onSpeechRecognitionClick: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -76,7 +81,6 @@ fun FrontViewPage(onGazeClick: () -> Unit, onGestureClick: () -> Unit, onMotionC
 @Preview
 @Composable
 fun FrontViewPagePreview() {
-    // For the preview, just pass in empty lambda functions for the clicks
     FrontViewPage(
         onGazeClick = {},
         onGestureClick = {},
