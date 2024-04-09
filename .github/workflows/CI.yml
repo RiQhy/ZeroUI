@@ -28,6 +28,9 @@ jobs:
        # with:
        #   java-version: 1.8
 
+      - name: Change wrapper permissions
+        run: chmod +x ./gradlew
+
       # Run Build Project
       - name: Build gradle project
         run: ./gradlew build
