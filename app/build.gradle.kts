@@ -61,6 +61,7 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     implementation("androidx.navigation:navigation-compose:2.7.7")
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -68,4 +69,30 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    // CameraX core library
+
+    implementation ("androidx.camera:camera-core:1.2.0-alpha02")
+
+    // CameraX Camera2 extensions
+    implementation ("androidx.camera:camera-camera2:1.2.0-alpha02")
+
+    // CameraX Lifecycle library
+    implementation ("androidx.camera:camera-lifecycle:1.2.0-alpha02")
+
+    // CameraX View class
+    implementation ("androidx.camera:camera-view:1.2.0-alpha02")
+
+    // WindowManager
+    implementation ("androidx.window:window:1.1.0-alpha03")
+
+    // Unit testing
+    testImplementation ("junit:junit:4.13.2")
+
+    // Instrumented testing
+    androidTestImplementation ("androidx.test.ext:junit:1.1.3")
+    androidTestImplementation ("androidx.test.espresso:espresso-core:3.4.0")
+
+    // Mediapipe Library
+    implementation ("com.google.mediapipe:tasks-vision:0.10.0")
 }
