@@ -3,6 +3,7 @@ package com.example.zeroui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -31,6 +32,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
@@ -40,7 +42,6 @@ fun Navigation() {
                 onGazeClick = { navController.navigate("GazeDestination") },
                 onGestureClick = { navController.navigate("GestureDestination") },
                 onMotionClick = { navController.navigate("Motion Sensors") },
-                onSpeechRecognitionClick = { navController.navigate("SpeechDestination") }
             )
         }
         composable("Motion Sensors") { MotionSensorView(navController) }
@@ -49,6 +50,7 @@ fun Navigation() {
         //composable("") {  }
     }
 }
+@OptIn(ExperimentalAnimationApi::class)
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
@@ -57,7 +59,6 @@ fun GreetingPreview() {
             onGazeClick = {},
             onGestureClick = {},
             onMotionClick = {},
-            onSpeechRecognitionClick = {}
         )
     }
 }
