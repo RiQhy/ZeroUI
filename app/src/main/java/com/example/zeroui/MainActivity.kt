@@ -83,7 +83,7 @@ fun Navigation() {
     NavHost(navController = navController, startDestination = "Front View") {
         composable("Front View") {
             FrontViewPage(
-                onGazeClick = { navController.navigate("GazeDestination") },
+                onGazeClick = { navController.navigate("CameraScreen") },
                 onGestureClick = { navController.navigate("GestureDestination") },
                 onMotionClick = { navController.navigate("Motion Sensors") },
             )
