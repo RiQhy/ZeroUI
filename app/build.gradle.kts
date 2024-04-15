@@ -53,6 +53,9 @@ dependencies {
     //animation depenency
     implementation ("androidx.compose.animation:animation-core:1.6.5")
 
+//    implementation ("com.google.android.gms:play-services-speech:17.0.0")
+
+
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.activity:activity-compose:1.8.2")

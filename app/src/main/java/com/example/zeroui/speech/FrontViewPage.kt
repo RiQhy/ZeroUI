@@ -1,6 +1,5 @@
 package com.example.zeroui.speech
 
-// Compose components
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,8 +22,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.zeroui.R
-
-
 
 @Composable
 fun FrontViewPage(
@@ -62,9 +59,10 @@ fun FrontViewPage(
             modifier = Modifier
                 .padding(start = 16.dp, top = 16.dp)
                 .align(Alignment.TopStart),
-            isRecordingInProgress = isSpeechRecognitionInProgress,
-            onClick = { isSpeechRecognitionInProgress = !isSpeechRecognitionInProgress }, // Toggle recognition status
-            iconResId = R.drawable.audio_recording
+            onClick = {
+                // Toggle recognition status
+                isSpeechRecognitionInProgress = !isSpeechRecognitionInProgress
+            }
         )
     }
 

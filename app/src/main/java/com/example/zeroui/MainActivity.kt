@@ -16,6 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.zeroui.speech.FrontViewPage
 import com.example.zeroui.ui.theme.ZeroUITheme
 
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +33,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun Navigation() {
@@ -50,6 +52,7 @@ fun Navigation() {
         //composable("") {  }
     }
 }
+
 @OptIn(ExperimentalAnimationApi::class)
 @Preview(showBackground = true)
 @Composable
