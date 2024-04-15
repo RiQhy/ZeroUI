@@ -61,6 +61,18 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     implementation("androidx.navigation:navigation-compose:2.7.7")
+    // CameraX
+
+    implementation("androidx.camera:camera-camera2:1.4.0-alpha04")
+    implementation("androidx.camera:camera-lifecycle:1.4.0-alpha04")
+    implementation("androidx.camera:camera-view:1.4.0-alpha04")
+    // ML Kit
+
+    implementation("com.google.accompanist:accompanist-permissions:0.35.0-alpha")
+    implementation("com.google.mlkit:vision-common:17.3.0")
+    implementation("com.google.android.gms:play-services-mlkit-face-detection:17.1.0")
+
+
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
