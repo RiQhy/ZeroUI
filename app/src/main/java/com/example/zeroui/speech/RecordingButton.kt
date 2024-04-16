@@ -50,7 +50,7 @@ fun RecordingButton(
             matches?.firstOrNull()?.let { command ->
                 when {
                     command.contains("Start Motion Recognition", true) -> {
-                        // Call function to start motion recognition
+                        onClick() // Вызов функции перехода на страницу MotionSensorView
                     }
                     else -> {
                         // Handle unknown command

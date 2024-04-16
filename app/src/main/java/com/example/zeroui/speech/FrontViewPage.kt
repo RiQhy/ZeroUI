@@ -59,10 +59,7 @@ fun FrontViewPage(
             modifier = Modifier
                 .padding(start = 16.dp, top = 16.dp)
                 .align(Alignment.TopStart),
-            onClick = {
-                // Toggle recognition status
-                isSpeechRecognitionInProgress = !isSpeechRecognitionInProgress
-            }
+            onClick = onMotionClick
         )
     }
 
