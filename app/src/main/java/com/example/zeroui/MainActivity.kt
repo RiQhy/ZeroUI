@@ -38,7 +38,7 @@ fun Navigation() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "Motion Sensors") {
         composable("Motion Sensors") { MotionSensorView(navController) }
-        //composable("") {  }
+        composable("Gesture Recognizer") { PermissionsScreen(navController)  }
         //composable("") {  }
         //composable("") {  }
     }
