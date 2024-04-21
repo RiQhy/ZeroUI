@@ -1,9 +1,6 @@
 package com.example.zeroui
 
 import android.Manifest
-import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothManager
-import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -19,6 +16,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.navigation.compose.NavHost
@@ -33,7 +31,6 @@ class MainActivity : ComponentActivity() {
     private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
         if (!isGranted) {
             // Inform the user that the permission is needed.
-
         }
     }
 
@@ -43,12 +40,11 @@ class MainActivity : ComponentActivity() {
         val permissionsGranted = HashMap<String, Boolean>()
         val requiredPermissions: Array<String> = arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
-
+            Manifest.permission.RECORD_AUDIO, // Add RECORD_AUDIO permission
+            Manifest.permission.ACTIVITY_RECOGNITION // Add ACTIVITY_RECOGNITION permission
         )
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && ContextCompat.checkSelfPermission(
-                this, Manifest.permission.ACTIVITY_RECOGNITION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissionLauncher.launch(Manifest.permission.ACTIVITY_RECOGNITION)
-        }
+
+        // Request permissions for requiredPermissions
         val requestPermissionsLauncher =
             registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
                 permissions.entries.forEach { entry ->
@@ -61,6 +57,9 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
+        // Launch permission request
+        requestPermissionsLauncher.launch(requiredPermissions)
+
         setContent {
             ZeroUITheme {
                 // A surface container using the 'background' color from the theme
@@ -70,7 +69,6 @@ class MainActivity : ComponentActivity() {
                 ) {
                     Navigation()
                 }
-                requestPermissionsLauncher.launch(requiredPermissions)
             }
         }
     }
@@ -90,8 +88,6 @@ fun Navigation() {
         }
         composable("Motion Sensors") { MotionSensorView(navController) }
         composable("CameraScreen") { CameraScreen() }
-        //composable("") {  }
-        //composable("") {  }
     }
 }
 
