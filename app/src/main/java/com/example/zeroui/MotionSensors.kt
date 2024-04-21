@@ -24,6 +24,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -139,6 +144,10 @@ fun RotationDegree(){
     val sensorManager = getSystemService(LocalContext.current, SensorManager::class.java) as SensorManager
     val rotationVectorSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
 
+    var azimuthDegrees by remember { mutableStateOf(0f) }
+    var pitchDegrees by remember { mutableStateOf(0f) }
+    var rollDegrees by remember { mutableStateOf(0f) }
+
     val sensorListener = object : SensorEventListener {
         override fun onSensorChanged(event: SensorEvent) {
             // Extract rotation vector data from SensorEvent
@@ -150,12 +159,10 @@ fun RotationDegree(){
             SensorManager.getOrientation(rotationMatrix, orientation)
 
             // Convert radians to degrees
-            val azimuthDegrees = Math.toDegrees(orientation[0].toDouble()).toFloat()
-            val pitchDegrees = Math.toDegrees(orientation[1].toDouble()).toFloat()
-            val rollDegrees = Math.toDegrees(orientation[2].toDouble()).toFloat()
+            azimuthDegrees = Math.toDegrees(orientation[0].toDouble()).toFloat()
+            pitchDegrees = Math.toDegrees(orientation[1].toDouble()).toFloat()
+            rollDegrees = Math.toDegrees(orientation[2].toDouble()).toFloat()
 
-            // Update UI with the rotation data
-            // You can pass these values to your custom composable or draw them directly here
         }
 
         override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
@@ -164,19 +171,19 @@ fun RotationDegree(){
     }
 
     // Register the sensor listener when the composable is created
-    LocalContext.current.resources
-    sensorManager.registerListener(sensorListener, rotationVectorSensor, SensorManager.SENSOR_DELAY_NORMAL)
-
-    // Unregister the sensor listener when the composable is removed
     DisposableEffect(Unit) {
-       onDispose {
-           sensorManager.unregisterListener(sensorListener)
-       }
+        sensorManager.registerListener(sensorListener, rotationVectorSensor, SensorManager.SENSOR_DELAY_NORMAL)
+        onDispose {
+            sensorManager.unregisterListener(sensorListener)
+        }
     }
+
+    // Draw the rotation vector based on the current state
+    DrawRotationVector(azimuthDegrees, pitchDegrees, rollDegrees)
 }
 
 @Composable
-fun DrawRotationVector(azimuth: Float, pitch: Float, roll: Float) {
+fun DrawRotationVector(azimuthDegrees: Float, pitchDegrees: Float, rollDegrees: Float) {
     Canvas(modifier = Modifier.fillMaxSize()) {
         val centerX = size.width / 2
         val centerY = size.height / 2
@@ -186,22 +193,20 @@ fun DrawRotationVector(azimuth: Float, pitch: Float, roll: Float) {
 
         // Draw lines representing device orientation
         val lineLength = 2 * radius
-        val azimuthLineX = centerX + lineLength * sin(azimuth)
-        val azimuthLineY = centerY - lineLength * cos(azimuth)
+        val azimuthRadians = Math.toRadians(azimuthDegrees.toDouble())
+        val azimuthLineX = centerX + lineLength * sin(azimuthRadians).toFloat()
+        val azimuthLineY = centerY - lineLength * cos(azimuthRadians).toFloat()
         drawLine(color = Color.Red, start = Offset(centerX, centerY), end = Offset(azimuthLineX, azimuthLineY), strokeWidth = 5f)
 
-        val pitchLineX = centerX + lineLength * sin(pitch)
-        val pitchLineY = centerY - lineLength * cos(pitch)
+        val pitchRadians = Math.toRadians(pitchDegrees.toDouble())
+        val pitchLineX = centerX + lineLength * sin(pitchRadians).toFloat()
+        val pitchLineY = centerY - lineLength * cos(pitchRadians).toFloat()
         drawLine(color = Color.Green, start = Offset(centerX, centerY), end = Offset(pitchLineX, pitchLineY), strokeWidth = 5f)
 
-        val rollLineX = centerX + lineLength * sin(roll)
-        val rollLineY = centerY - lineLength * cos(roll)
+        val rollRadians = Math.toRadians(rollDegrees.toDouble())
+        val rollLineX = centerX + lineLength * sin(rollRadians).toFloat()
+        val rollLineY = centerY - lineLength * cos(rollRadians).toFloat()
         drawLine(color = Color.Yellow, start = Offset(centerX, centerY), end = Offset(rollLineX, rollLineY), strokeWidth = 5f)
     }
 }
 
-@Preview
-@Composable
-fun PreviewRotationVector() {
-    DrawRotationVector(azimuth = 0f, pitch = 0f, roll = 0f)
-}
