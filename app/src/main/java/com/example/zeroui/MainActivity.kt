@@ -24,7 +24,7 @@ import com.example.zeroui.ui.theme.ZeroUITheme
 
 class MainActivity : ComponentActivity() {
     private val requestPermissionLauncher =
-        this.registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
             if (!isGranted) {
                 // Inform the user that the permission is needed.
 
