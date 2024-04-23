@@ -33,9 +33,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.mediapipe.examples.gesturerecognizer.GestureRecognizerHelper
-import com.google.mediapipe.examples.gesturerecognizer.MainViewModel
-import com.google.mediapipe.examples.gesturerecognizer.databinding.FragmentGalleryBinding
+import com.example.zeroui.GestureRecognizerHelper
+import com.example.zeroui.MainViewModel
+import com.example.zeroui.databinding.FragmentGalleryBinding
 import com.google.mediapipe.tasks.vision.core.RunningMode
 import java.util.*
 import java.util.concurrent.Executors

@@ -16,7 +16,6 @@
 package com.example.zeroui.fragment
 
 import android.annotation.SuppressLint
-
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
@@ -33,10 +32,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.zeroui.GestureRecognizerHelper
-import com.google.mediapipe.examples.gesturerecognizer.GestureRecognizerHelper
-import com.example.zeroui.gesturerecognizer.MainViewModel
+import com.example.zeroui.MainViewModel
 import com.example.zeroui.R
-import com.google.mediapipe.examples.gesturerecognizer.databinding.FragmentCameraBinding
+import com.example.zeroui.databinding.FragmentCameraBinding
 import com.google.mediapipe.tasks.vision.core.RunningMode
 import java.util.*
 import java.util.concurrent.ExecutorService
