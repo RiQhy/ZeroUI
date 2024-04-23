@@ -42,6 +42,8 @@ class MainActivity : ComponentActivity() {
         val permissionsGranted = HashMap<String, Boolean>()
         val requiredPermissions: Array<String> = arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.ACTIVITY_RECOGNITION
 
         )
         if (ContextCompat.checkSelfPermission(
