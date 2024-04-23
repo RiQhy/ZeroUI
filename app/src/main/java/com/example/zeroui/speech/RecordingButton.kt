@@ -1,14 +1,11 @@
 package com.example.zeroui.speech
 
-import android.app.Activity
-import android.content.ActivityNotFoundException
+
 import android.content.Intent
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.speech.RecognizerIntent
 import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
@@ -29,37 +26,95 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.zeroui.R
+import android.speech.RecognitionListener
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
+import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
+import java.util.Locale
 
-
-
-// Composable function for the recording button
 @Composable
 fun RecordingButton(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit // Callback function to handle button click
+    onClick: () -> Unit
 ) {
     val context = LocalContext.current
 
     var isRecordingInProgress by remember { mutableStateOf(false) }
+    var recognizedCommand by remember { mutableStateOf<String?>(null) }
 
-    // Launcher for speech recognition activity result
-    val speechRecognizerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val data: Intent? = result.data
-            val matches = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-            matches?.firstOrNull()?.let { command ->
-                when {
-                    command.contains("Start Motion Recognition", true) -> {
-                        // Call function to start motion recognition
+    val recognitionListener = object : RecognitionListener {
+        override fun onReadyForSpeech(params: Bundle?) {
+            // Display a prompt message when ready for speech
+            recognizedCommand = "Speak..."
+        }
+
+        override fun onBeginningOfSpeech() {}
+        override fun onRmsChanged(rmsdB: Float) {}
+        override fun onBufferReceived(buffer: ByteArray?) {}
+        override fun onEndOfSpeech() {}
+        override fun onError(error: Int) {
+            // Display toast message for recognition error
+            Toast.makeText(context, "Recognition error", Toast.LENGTH_SHORT).show()
+            isRecordingInProgress = false
+        }
+
+        override fun onResults(results: Bundle?) {
+            results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)?.let { matches ->
+                matches.firstOrNull()?.let { command ->
+                    recognizedCommand = command
+                    if (command.equals("Motion page", ignoreCase = true)) { // check
+                        Toast.makeText(context, "Command recognized: $command", Toast.LENGTH_SHORT).show()
+                        recognizedCommand = command
+                        onClick()
+                    } else if (command.equals("Gaze", ignoreCase = true)) { // check
+                    Toast.makeText(context, "Command recognized: $command", Toast.LENGTH_SHORT).show()
+                    recognizedCommand = command
+                    onClick()
+                    } else {
+                        // unrecognized command
+                        Toast.makeText(context, "Unrecognized command: $command", Toast.LENGTH_SHORT).show()
                     }
-                    else -> {
-                        // Handle unknown command
-                        Toast.makeText(context, "Unknown command: $command", Toast.LENGTH_SHORT).show()
-                    }
+
                 }
             }
+            isRecordingInProgress = false
         }
-        isRecordingInProgress = false // Stop recording after receiving result
+
+        override fun onPartialResults(partialResults: Bundle?) {}
+        override fun onEvent(eventType: Int, params: Bundle?) {}
+    }
+
+    val speechRecognizer = remember {
+        SpeechRecognizer.createSpeechRecognizer(context).apply {
+            setRecognitionListener(recognitionListener)
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        val startListening: () -> Unit = {
+            val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+            intent.putExtra(
+                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+            )
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault().toString())
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak...")
+            speechRecognizer.startListening(intent)
+            isRecordingInProgress = true
+
+            Handler(Looper.getMainLooper()).postDelayed({
+                if (isRecordingInProgress) {
+                    // Display toast message for timeout
+                    Toast.makeText(context, "No command received. Please try again.", Toast.LENGTH_SHORT).show()
+                    isRecordingInProgress = false
+                }
+            }, 10000)
+        }
+
+        if (!isRecordingInProgress) {
+            startListening()
+        }
     }
 
     Box(
@@ -70,24 +125,7 @@ fun RecordingButton(
                 .size(64.dp)
                 .clickable {
                     if (!isRecordingInProgress) {
-                        try {
-                            val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-                            intent.putExtra(
-                                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
-                            )
-                            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-US")
-                            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak now...")
-                            speechRecognizerLauncher.launch(intent)
-                            isRecordingInProgress = true // Start recording when button is clicked
-
-                            // Timer to stop recording after 10 seconds
-                            Handler(Looper.getMainLooper()).postDelayed({
-                                isRecordingInProgress = false
-                            }, 10000)
-                        } catch (e: ActivityNotFoundException) {
-                            Toast.makeText(context, "Speech recognition not available", Toast.LENGTH_SHORT).show()
-                        }
+                        isRecordingInProgress = true
                     }
                 },
             contentAlignment = Alignment.Center
@@ -96,7 +134,6 @@ fun RecordingButton(
                 strokeWidth = 4.dp,
                 color = Color.Red,
                 modifier = Modifier.size(48.dp),
-                // Rotate the indicator during the recording
                 progress = animateFloatAsState(
                     targetValue = if (isRecordingInProgress) 1f else 0f,
                     animationSpec = tween(durationMillis = 10000), label = ""
@@ -107,6 +144,13 @@ fun RecordingButton(
                 contentDescription = "Recording Icon",
                 tint = Color.Green,
                 modifier = Modifier.size(32.dp)
+            )
+        }
+        recognizedCommand?.let {
+            Text(
+                text = it,
+                color = Color.White,
+                modifier = Modifier.align(Alignment.BottomCenter)
             )
         }
     }

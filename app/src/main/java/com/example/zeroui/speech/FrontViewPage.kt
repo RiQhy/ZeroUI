@@ -59,10 +59,7 @@ fun FrontViewPage(
             modifier = Modifier
                 .padding(start = 16.dp, top = 16.dp)
                 .align(Alignment.TopStart),
-            onClick = {
-                // Toggle recognition status
-                isSpeechRecognitionInProgress = !isSpeechRecognitionInProgress
-            }
+            onClick = onMotionClick
         )
     }
 
@@ -102,7 +99,7 @@ fun FrontViewPage(
             },
             modifier = Modifier.fillMaxWidth(0.7f).padding(bottom = 16.dp)
         ) {
-            Text("Start Gaze Recognition")
+            Text("Gaze Recognition")
         }
         // Button for gesture recognition
         Button(
@@ -112,7 +109,7 @@ fun FrontViewPage(
             },
             modifier = Modifier.fillMaxWidth(0.7f).padding(bottom = 16.dp)
         ) {
-            Text("Start Gesture Recognition")
+            Text("Gesture Recognition")
         }
         // Button for motion recognition
         Button(
@@ -122,7 +119,7 @@ fun FrontViewPage(
             },
             modifier = Modifier.fillMaxWidth(0.7f).padding(bottom = 16.dp)
         ) {
-            Text("Start Motion Recognition")
+            Text("Motion Recognition")
         }
     }
 }
