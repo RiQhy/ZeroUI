@@ -91,7 +91,7 @@ fun Navigation() {
             )
         }
         composable("Motion Sensors") { MotionSensorView(navController) }
-        composable("CameraScreen") { CameraScreen() }
+        composable("CameraScreen") { CameraScreenView(navController) }
         //composable("") {  }
         //composable("") {  }
     }
