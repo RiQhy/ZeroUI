@@ -97,7 +97,7 @@ dependencies {
     androidTestImplementation ("androidx.test.ext:junit:1.1.5")
     androidTestImplementation ("androidx.test.espresso:espresso-core:3.5.1")
 
-    // Mediapipe Library must use 0.10 to work
+    // Media-pipe Library must use 0.10 to work
     implementation ("com.google.mediapipe:tasks-vision:0.10.0")
     implementation ("com.google.accompanist:accompanist-permissions:0.23.1")
 }

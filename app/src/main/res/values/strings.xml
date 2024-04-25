@@ -15,9 +15,10 @@
     ~ limitations under the License.
 -->
 <resources>
-    <string name="app_name">MP Gesture Recognizer</string>
 
-    <string name="media_pipe">MediaPipe</string>
+    <string name="app_name">ZeroUi</string>
+
+    <string name="media_pipe">Gesture Recognizer</string>
 
     <string name="alt_bottom_sheet_chevron">Bottom sheet expandable indicator</string>
 

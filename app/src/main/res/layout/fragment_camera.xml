@@ -38,7 +38,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_results"
         android:layout_width="match_parent"
-        android:layout_height="140dp"
+        android:layout_height="51dp"
         android:layout_gravity="top"
         android:layout_marginBottom="@dimen/bottom_sheet_peek_height"
         android:background="@color/bottom_sheet_background"
