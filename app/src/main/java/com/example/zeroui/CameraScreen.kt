@@ -162,7 +162,7 @@ private fun setupCamera(
 
         try {
             cameraProvider.unbindAll()
-            cameraProvider.bindToLifecycle(lifecycleOwner, CameraSelector.DEFAULT_BACK_CAMERA, preview, imageAnalysis)
+            cameraProvider.bindToLifecycle(lifecycleOwner, CameraSelector.DEFAULT_FRONT_CAMERA, preview, imageAnalysis)
         } catch (exc: Exception) {
             Log.e("CameraScreen", "Binding camera use cases failed", exc)
         }
