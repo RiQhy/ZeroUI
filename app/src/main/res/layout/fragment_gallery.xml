@@ -51,7 +51,7 @@
                 android:layout_height="match_parent"
                 android:visibility="gone" />
 
-            <com.google.mediapipe.examples.gesturerecognizer.OverlayView
+            <com.example.zeroui.OverlayView
                 android:id="@+id/overlay"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
