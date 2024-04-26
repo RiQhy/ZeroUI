@@ -59,7 +59,9 @@ fun FrontViewPage(
             modifier = Modifier
                 .padding(start = 16.dp, top = 16.dp)
                 .align(Alignment.TopStart),
-            onClick = onMotionClick
+            onClick = onMotionClick,
+            onGazeClick = onGazeClick,
+            onGestureClick = onGestureClick
         )
     }
 

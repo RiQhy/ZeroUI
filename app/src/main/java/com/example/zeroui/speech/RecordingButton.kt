@@ -6,8 +6,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
@@ -29,6 +27,9 @@ import com.example.zeroui.R
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.offset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import java.util.Locale
@@ -36,19 +37,25 @@ import java.util.Locale
 @Composable
 fun RecordingButton(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onGazeClick: ()-> Unit,
+    onGestureClick: ()->Unit
 ) {
+    // Accessing the current context
     val context = LocalContext.current
 
+    // State to track whether recording is in progress and recognized command
     var isRecordingInProgress by remember { mutableStateOf(false) }
     var recognizedCommand by remember { mutableStateOf<String?>(null) }
 
+    // Recognition listener for speech recognition
     val recognitionListener = object : RecognitionListener {
         override fun onReadyForSpeech(params: Bundle?) {
             // Display a prompt message when ready for speech
             recognizedCommand = "Speak..."
         }
 
+        //callback methods for the recognition process
         override fun onBeginningOfSpeech() {}
         override fun onRmsChanged(rmsdB: Float) {}
         override fun onBufferReceived(buffer: ByteArray?) {}
@@ -63,34 +70,43 @@ fun RecordingButton(
             results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)?.let { matches ->
                 matches.firstOrNull()?.let { command ->
                     recognizedCommand = command
-                    if (command.equals("Motion page", ignoreCase = true)) { // check
-                        Toast.makeText(context, "Command recognized: $command", Toast.LENGTH_SHORT).show()
-                        recognizedCommand = command
-                        onClick()
-                    } else if (command.equals("Gaze", ignoreCase = true)) { // check
-                    Toast.makeText(context, "Command recognized: $command", Toast.LENGTH_SHORT).show()
-                    recognizedCommand = command
-                    onClick()
-                    } else {
-                        // unrecognized command
-                        Toast.makeText(context, "Unrecognized command: $command", Toast.LENGTH_SHORT).show()
+                    when {
+                        // Handling recognized commands
+                        command.equals("Motion", ignoreCase = true) -> {
+                            Toast.makeText(context, "Command recognized: $command", Toast.LENGTH_SHORT).show()
+                            onClick()
+                        }
+                        command.equals("Gaze", ignoreCase = true) -> {
+                            Toast.makeText(context, "Command recognized: $command", Toast.LENGTH_SHORT).show()
+                            onGazeClick()
+                        }
+                        command.equals("Gesture", ignoreCase = true) -> {
+                            Toast.makeText(context, "Command recognized: $command", Toast.LENGTH_SHORT).show()
+                            onGestureClick()
+                        }
+                        else -> {
+                            // unrecognized command
+                            Toast.makeText(context, "Unrecognized command: $command", Toast.LENGTH_SHORT).show()
+                        }
                     }
-
                 }
             }
             isRecordingInProgress = false
         }
 
+        // callback methods for the recognition process
         override fun onPartialResults(partialResults: Bundle?) {}
         override fun onEvent(eventType: Int, params: Bundle?) {}
     }
 
+    // Initializing SpeechRecognizer with recognition listener
     val speechRecognizer = remember {
         SpeechRecognizer.createSpeechRecognizer(context).apply {
             setRecognitionListener(recognitionListener)
         }
     }
 
+    // Start listening for speech recognition
     LaunchedEffect(Unit) {
         val startListening: () -> Unit = {
             val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
@@ -103,6 +119,7 @@ fun RecordingButton(
             speechRecognizer.startListening(intent)
             isRecordingInProgress = true
 
+            // Set a timeout for recognition
             Handler(Looper.getMainLooper()).postDelayed({
                 if (isRecordingInProgress) {
                     // Display toast message for timeout
@@ -117,9 +134,11 @@ fun RecordingButton(
         }
     }
 
+    // Composable Box containing recording button elements
     Box(
         modifier = modifier.size(64.dp)
     ) {
+        // Box containing circular progress indicator and recording icon
         Box(
             modifier = Modifier
                 .size(64.dp)
@@ -130,15 +149,19 @@ fun RecordingButton(
                 },
             contentAlignment = Alignment.Center
         ) {
-            CircularProgressIndicator(
-                strokeWidth = 4.dp,
-                color = Color.Red,
-                modifier = Modifier.size(48.dp),
-                progress = animateFloatAsState(
-                    targetValue = if (isRecordingInProgress) 1f else 0f,
-                    animationSpec = tween(durationMillis = 10000), label = ""
-                ).value
+
+            // Animating circular progress indicator based on recording status
+            val progress by animateFloatAsState(
+                targetValue = if (isRecordingInProgress) 1f else 0f,
+                animationSpec = tween(durationMillis = 10000), label = ""
             )
+            CircularProgressIndicator(
+                progress = { progress },
+                modifier = Modifier.size(48.dp),
+                color = Color.Red,
+                strokeWidth = 4.dp,
+            )
+            // Recording icon
             Icon(
                 painter = painterResource(id = R.drawable.audio_recording),
                 contentDescription = "Recording Icon",
@@ -146,11 +169,13 @@ fun RecordingButton(
                 modifier = Modifier.size(32.dp)
             )
         }
+
+        // Display recognized command text
         recognizedCommand?.let {
             Text(
                 text = it,
                 color = Color.White,
-                modifier = Modifier.align(Alignment.BottomCenter)
+                modifier = Modifier.align(Alignment.BottomCenter).offset(y=32.dp)
             )
         }
     }
@@ -160,5 +185,9 @@ fun RecordingButton(
 @Preview
 @Composable
 fun RecordingButtonPreview() {
-    RecordingButton(onClick = {})
+    RecordingButton(
+        onClick = {},
+        onGazeClick = {},
+        onGestureClick = {}
+    )
 }
