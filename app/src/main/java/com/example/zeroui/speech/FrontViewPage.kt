@@ -134,4 +134,5 @@ fun FrontViewPagePreview() {
         onGestureClick = {},
         onMotionClick = {},
     )
+
 }
