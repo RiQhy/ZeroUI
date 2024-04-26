@@ -52,7 +52,7 @@ fun MotionSensorView(navController: NavController) {
                         horizontalArrangement = Arrangement.SpaceAround,
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        IconButton(onClick = { navController.navigate("") }) {
+                        IconButton(onClick = { navController.navigate("Gesture Recognizer") }) {
                             Icon(
                                 Icons.Filled.Home,
                                 contentDescription = "Takes you to the Front page"
