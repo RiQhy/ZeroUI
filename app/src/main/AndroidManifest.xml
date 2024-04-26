@@ -5,7 +5,7 @@
 
     <dist:module dist:instant="true" />
     <!-- Declare features -->
-
+    <!-- Declare permissions -->
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.CAMERA" />
@@ -13,12 +13,10 @@
     <uses-feature android:name="android.hardware.camera.front" android:required="true" />
     <uses-feature android:name="android.hardware.sensor.stepcounter" android:required="true" />
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
-
-
-    <!-- Declare permissions -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera"
         android:required="false"/>
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
