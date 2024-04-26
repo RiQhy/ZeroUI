@@ -106,15 +106,23 @@ fun CameraScreen() {
     val faceState = remember { mutableStateOf(FaceState.NO_FACE) }
     CameraPreview(faceState)
 
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(
-            color = when (faceState.value) {
-                FaceState.FACE_OPEN_EYES -> Color.Green
-                FaceState.FACE_CLOSED_EYES -> Color.Black
-                FaceState.NO_FACE -> Color.Red
-            }
-        ))
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Camera preview as the first layer
+        CameraPreview(faceState)
+
+        // Color overlay as the second layer
+        Box(
+            modifier = Modifier
+                .matchParentSize() // This ensures the box covers the entire parent size
+                .background(
+                    color = when (faceState.value) {
+                        FaceState.FACE_OPEN_EYES -> Color.Green.copy(alpha = 0.3f)
+                        FaceState.FACE_CLOSED_EYES -> Color.Black.copy(alpha = 0.3f)
+                        FaceState.NO_FACE -> Color.Red.copy(alpha = 0.3f)
+                    }
+                )
+        )
+    }
 }
 
 enum class FaceState {
