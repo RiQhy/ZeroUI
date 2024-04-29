@@ -4,6 +4,7 @@ import android.Manifest
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -18,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
@@ -70,7 +72,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Navigation()
+                    Navigation(this@MainActivity)
                 }
                 requestPermissionsLauncher.launch(requiredPermissions)
             }
@@ -80,21 +82,25 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun Navigation() {
+fun Navigation(context: Context) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "Front View") {
         composable("Front View") {
             FrontViewPage(
                 onGazeClick = { navController.navigate("CameraScreen") },
-                onGestureClick = { navController.navigate("GestureDestination") },
+                onGestureClick = { fragmentActivity(context) },
                 onMotionClick = { navController.navigate("Motion Sensors") },
             )
         }
         composable("Motion Sensors") { MotionSensorView(navController) }
         composable("CameraScreen") { CameraScreenView(navController) }
         //composable("") {  }
-        //composable("") {  }
     }
+}
+
+fun fragmentActivity(context: Context) {
+    val intent = Intent(context, MainActivity2::class.java)
+    context.startActivity(intent)
 }
 
 @OptIn(ExperimentalAnimationApi::class)
