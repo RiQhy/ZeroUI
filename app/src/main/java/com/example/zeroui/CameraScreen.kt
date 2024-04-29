@@ -104,26 +104,34 @@ fun CameraScreenView(navController: NavController) {
 @Composable
 fun CameraScreen() {
     val faceState = remember { mutableStateOf(FaceState.NO_FACE) }
-    CameraPreview(faceState)
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        // Camera preview as the first layer
-        CameraPreview(faceState)
-
-        // Color overlay as the second layer
+    Column(modifier = Modifier.fillMaxSize()) {
+        // Use a Box to wrap the CameraPreview and control its size
         Box(
             modifier = Modifier
-                .matchParentSize()
+                .weight(1f)  // Adjust the weight to control the size
+                .fillMaxWidth()
+        ) {
+            CameraPreview(faceState)
+        }
+
+        // Color-changing box below the camera preview
+        Box(
+            modifier = Modifier
+                .weight(1f)  // Adjust the weight to control the size
+                .fillMaxWidth()
                 .background(
                     color = when (faceState.value) {
-                        FaceState.FACE_OPEN_EYES -> Color.Green.copy(alpha = 0.3f)
-                        FaceState.FACE_CLOSED_EYES -> Color.Black.copy(alpha = 0.3f)
-                        FaceState.NO_FACE -> Color.Red.copy(alpha = 0.3f)
+                        FaceState.FACE_OPEN_EYES -> Color.Green
+                        FaceState.FACE_CLOSED_EYES -> Color.Blue
+                        FaceState.NO_FACE -> Color.Red
                     }
                 )
-        )
+        ) {
+        }
     }
 }
+
 
 enum class FaceState {
     FACE_OPEN_EYES, FACE_CLOSED_EYES, NO_FACE
