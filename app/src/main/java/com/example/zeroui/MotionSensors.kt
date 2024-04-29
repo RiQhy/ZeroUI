@@ -192,6 +192,9 @@ fun RotationDegree(){
 
 @Composable
 fun DrawRotationVectorAzimuth(azimuthDegrees: Float) {
+    Column {
+        Text("$azimuthDegrees")
+    }
     Canvas(
         modifier = Modifier.size(200.dp),
         onDraw = {
@@ -213,6 +216,9 @@ fun DrawRotationVectorAzimuth(azimuthDegrees: Float) {
 
 @Composable
 fun DrawRotationVectorPitch(pitchDegrees: Float) {
+    Column {
+        Text("$pitchDegrees")
+    }
     Canvas(
         modifier = Modifier.size(200.dp),
         onDraw = {
@@ -235,6 +241,9 @@ fun DrawRotationVectorPitch(pitchDegrees: Float) {
 
 @Composable
 fun DrawRotationVectorRoll(rollDegrees: Float) {
+    Column {
+        Text("$rollDegrees")
+    }
     Canvas(
         modifier = Modifier.size(200.dp),
         onDraw = {
