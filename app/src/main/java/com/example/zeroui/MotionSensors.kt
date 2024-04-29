@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.BottomAppBar
@@ -25,7 +27,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -34,7 +35,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -44,6 +44,7 @@ import kotlin.math.*
 @Composable
 fun MotionSensorView(navController: NavController) {
     // Bottom bar navigation and calls Displays that shows on the view
+    val scrollState = rememberScrollState()
     Scaffold(
         bottomBar = {
             BottomAppBar(
@@ -84,8 +85,9 @@ fun MotionSensorView(navController: NavController) {
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
-
                 .padding(innerPadding) // Apply padding from the Scaffold
+                .fillMaxSize()
+                .verticalScroll(scrollState)
         ) {
 
             Column(
@@ -162,7 +164,6 @@ fun RotationDegree(){
             azimuthDegrees = Math.toDegrees(orientation[0].toDouble()).toFloat()
             pitchDegrees = Math.toDegrees(orientation[1].toDouble()).toFloat()
             rollDegrees = Math.toDegrees(orientation[2].toDouble()).toFloat()
-
         }
 
         override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
@@ -179,34 +180,88 @@ fun RotationDegree(){
     }
 
     // Draw the rotation vector based on the current state
-    DrawRotationVector(azimuthDegrees, pitchDegrees, rollDegrees)
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        DrawRotationVectorAzimuth(azimuthDegrees)
+        DrawRotationVectorPitch(pitchDegrees)
+        DrawRotationVectorRoll(rollDegrees)
+    }
 }
 
 @Composable
-fun DrawRotationVector(azimuthDegrees: Float, pitchDegrees: Float, rollDegrees: Float) {
-    Canvas(modifier = Modifier.fillMaxSize()) {
-        val centerX = size.width / 2
-        val centerY = size.height / 2
-        val radius = 100f
-
-        drawCircle(color = Color.Blue, radius = radius, center = Offset(centerX, centerY))
-
-        // Draw lines representing device orientation
-        val lineLength = 2 * radius
-        val azimuthRadians = Math.toRadians(azimuthDegrees.toDouble())
-        val azimuthLineX = centerX + lineLength * sin(azimuthRadians).toFloat()
-        val azimuthLineY = centerY - lineLength * cos(azimuthRadians).toFloat()
-        drawLine(color = Color.Red, start = Offset(centerX, centerY), end = Offset(azimuthLineX, azimuthLineY), strokeWidth = 5f)
-
-        val pitchRadians = Math.toRadians(pitchDegrees.toDouble())
-        val pitchLineX = centerX + lineLength * sin(pitchRadians).toFloat()
-        val pitchLineY = centerY - lineLength * cos(pitchRadians).toFloat()
-        drawLine(color = Color.Green, start = Offset(centerX, centerY), end = Offset(pitchLineX, pitchLineY), strokeWidth = 5f)
-
-        val rollRadians = Math.toRadians(rollDegrees.toDouble())
-        val rollLineX = centerX + lineLength * sin(rollRadians).toFloat()
-        val rollLineY = centerY - lineLength * cos(rollRadians).toFloat()
-        drawLine(color = Color.Yellow, start = Offset(centerX, centerY), end = Offset(rollLineX, rollLineY), strokeWidth = 5f)
+fun DrawRotationVectorAzimuth(azimuthDegrees: Float) {
+    Column {
+        Text("$azimuthDegrees")
     }
+    Canvas(
+        modifier = Modifier.size(200.dp),
+        onDraw = {
+            val centerX = size.width / 2
+            val centerY = size.height / 2
+            val radius = 100f
+
+            drawCircle(color = Color.Blue, radius = radius, center = Offset(centerX, centerY))
+
+            // Draw lines representing device orientation
+            val lineLength = 2 * radius
+            val azimuthRadians = Math.toRadians(azimuthDegrees.toDouble())
+            val azimuthLineX = centerX + lineLength * sin(azimuthRadians).toFloat()
+            val azimuthLineY = centerY - lineLength * cos(azimuthRadians).toFloat()
+            drawLine(color = Color.Red, start = Offset(centerX, centerY), end = Offset(azimuthLineX, azimuthLineY), strokeWidth = 5f)
+        }
+    )
 }
+
+@Composable
+fun DrawRotationVectorPitch(pitchDegrees: Float) {
+    Column {
+        Text("$pitchDegrees")
+    }
+    Canvas(
+        modifier = Modifier.size(200.dp),
+        onDraw = {
+            val centerX = size.width / 2
+            val centerY = size.height / 2
+            val radius = 100f
+
+            drawCircle(color = Color.Blue, radius = radius, center = Offset(centerX, centerY))
+
+            // Draw lines representing device orientation
+            val lineLength = 2 * radius
+
+            val pitchRadians = Math.toRadians(pitchDegrees.toDouble())
+            val pitchLineX = centerX + lineLength * sin(pitchRadians).toFloat()
+            val pitchLineY = centerY - lineLength * cos(pitchRadians).toFloat()
+            drawLine(color = Color.Green, start = Offset(centerX, centerY), end = Offset(pitchLineX, pitchLineY), strokeWidth = 5f)
+        }
+    )
+}
+
+@Composable
+fun DrawRotationVectorRoll(rollDegrees: Float) {
+    Column {
+        Text("$rollDegrees")
+    }
+    Canvas(
+        modifier = Modifier.size(200.dp),
+        onDraw = {
+            val centerX = size.width / 2
+            val centerY = size.height / 2
+            val radius = 100f
+
+            drawCircle(color = Color.Blue, radius = radius, center = Offset(centerX, centerY))
+
+            // Draw lines representing device orientation
+            val lineLength = 2 * radius
+
+            val rollRadians = Math.toRadians(rollDegrees.toDouble())
+            val rollLineX = centerX + lineLength * sin(rollRadians).toFloat()
+            val rollLineY = centerY - lineLength * cos(rollRadians).toFloat()
+            drawLine(color = Color.Yellow, start = Offset(centerX, centerY), end = Offset(rollLineX, rollLineY), strokeWidth = 5f)
+        }
+    )
+}
+
 
