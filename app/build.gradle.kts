@@ -78,9 +78,9 @@ dependencies {
     androidTestImplementation(platform("androidx.compose:compose-bom:2024.04.01"))
     // CameraX
 
-    implementation("androidx.camera:camera-camera2:1.4.0-alpha04")
-    implementation("androidx.camera:camera-lifecycle:1.4.0-alpha04")
-    implementation("androidx.camera:camera-view:1.4.0-alpha04")
+    implementation("androidx.camera:camera-camera2:1.4.0-alpha05")
+    implementation("androidx.camera:camera-lifecycle:1.4.0-alpha05")
+    implementation("androidx.camera:camera-view:1.4.0-alpha05")
     // ML Kit
 
     implementation("com.google.accompanist:accompanist-permissions:0.35.0-alpha")
