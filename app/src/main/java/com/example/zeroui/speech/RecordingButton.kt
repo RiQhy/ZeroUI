@@ -72,7 +72,7 @@ fun RecordingButton(
                     recognizedCommand = command
                     when {
                         // Handling recognized commands
-                        command.equals("Motion", ignoreCase = true) -> {
+                        command.equals("Motion sensor", ignoreCase = true) -> {
                             Toast.makeText(context, "Command recognized: $command", Toast.LENGTH_SHORT).show()
                             onClick()
                         }
