@@ -101,7 +101,7 @@ fun FrontViewPage(
             },
             modifier = Modifier.fillMaxWidth(0.7f).padding(bottom = 16.dp)
         ) {
-            Text("Gaze Recognition")
+            Text("Eye tracker")
         }
         // Button for gesture recognition
         Button(
@@ -111,7 +111,7 @@ fun FrontViewPage(
             },
             modifier = Modifier.fillMaxWidth(0.7f).padding(bottom = 16.dp)
         ) {
-            Text("Gesture Recognition")
+            Text("Gesture")
         }
         // Button for motion recognition
         Button(
@@ -121,7 +121,7 @@ fun FrontViewPage(
             },
             modifier = Modifier.fillMaxWidth(0.7f).padding(bottom = 16.dp)
         ) {
-            Text("Motion Recognition")
+            Text("Motion sensor")
         }
     }
 }

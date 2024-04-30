@@ -76,7 +76,7 @@ fun RecordingButton(
                             Toast.makeText(context, "Command recognized: $command", Toast.LENGTH_SHORT).show()
                             onClick()
                         }
-                        command.equals("Gaze", ignoreCase = true) -> {
+                        command.equals("Eye tracker", ignoreCase = true) -> {
                             Toast.makeText(context, "Command recognized: $command", Toast.LENGTH_SHORT).show()
                             onGazeClick()
                         }
