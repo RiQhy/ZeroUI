@@ -53,28 +53,10 @@ fun CameraScreenView(navController: NavController) {
                         horizontalArrangement = Arrangement.SpaceAround,
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        IconButton(onClick = { navController.navigate("") }) {
+                        IconButton(onClick = { navController.navigate("Front View") }) {
                             Icon(
                                 Icons.Filled.Home,
                                 contentDescription = "Takes you to the Front page"
-                            )
-                        }
-                        IconButton(onClick = { navController.navigate("Motion Sensors") }) {
-                            Icon(
-                                Icons.Filled.Build,
-                                contentDescription = "Takes you to the motion sensors page",
-                            )
-                        }
-                        IconButton(onClick = { navController.navigate("") }) {
-                            Icon(
-                                Icons.Filled.Star,
-                                contentDescription = "Takes you to the ? page",
-                            )
-                        }
-                        IconButton(onClick = {  }) {
-                            Icon(
-                                Icons.Filled.Favorite,
-                                contentDescription = "Takes you to the ? page",
                             )
                         }
                     }
