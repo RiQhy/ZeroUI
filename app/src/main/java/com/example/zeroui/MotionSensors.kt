@@ -27,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -53,28 +54,10 @@ fun MotionSensorView(navController: NavController) {
                         horizontalArrangement = Arrangement.SpaceAround,
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        IconButton(onClick = { navController.navigate("Gesture Recognizer") }) {
+                        IconButton(onClick = { navController.navigate("Front View") }) {
                             Icon(
                                 Icons.Filled.Home,
                                 contentDescription = "Takes you to the Front page"
-                            )
-                        }
-                        IconButton(onClick = { navController.navigate("Motion Sensors") }) {
-                            Icon(
-                                Icons.Filled.Build,
-                                contentDescription = "Takes you to the motion sensors page",
-                            )
-                        }
-                        IconButton(onClick = { navController.navigate("") }) {
-                            Icon(
-                                Icons.Filled.Star,
-                                contentDescription = "Takes you to the ? page",
-                            )
-                        }
-                        IconButton(onClick = {  }) {
-                            Icon(
-                                Icons.Filled.Favorite,
-                                contentDescription = "Takes you to the ? page",
                             )
                         }
                     }
@@ -146,9 +129,9 @@ fun RotationDegree(){
     val sensorManager = getSystemService(LocalContext.current, SensorManager::class.java) as SensorManager
     val rotationVectorSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
 
-    var azimuthDegrees by remember { mutableStateOf(0f) }
-    var pitchDegrees by remember { mutableStateOf(0f) }
-    var rollDegrees by remember { mutableStateOf(0f) }
+    var azimuthDegrees by remember { mutableIntStateOf(0) }
+    var pitchDegrees by remember { mutableIntStateOf(0) }
+    var rollDegrees by remember { mutableIntStateOf(0) }
 
     val sensorListener = object : SensorEventListener {
         override fun onSensorChanged(event: SensorEvent) {
@@ -161,9 +144,9 @@ fun RotationDegree(){
             SensorManager.getOrientation(rotationMatrix, orientation)
 
             // Convert radians to degrees
-            azimuthDegrees = Math.toDegrees(orientation[0].toDouble()).toFloat()
-            pitchDegrees = Math.toDegrees(orientation[1].toDouble()).toFloat()
-            rollDegrees = Math.toDegrees(orientation[2].toDouble()).toFloat()
+            azimuthDegrees = Math.toDegrees(orientation[0].toDouble()).toInt()
+            pitchDegrees = Math.toDegrees(orientation[1].toDouble()).toInt()
+            rollDegrees = Math.toDegrees(orientation[2].toDouble()).toInt()
         }
 
         override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
@@ -191,9 +174,9 @@ fun RotationDegree(){
 }
 
 @Composable
-fun DrawRotationVectorAzimuth(azimuthDegrees: Float) {
+fun DrawRotationVectorAzimuth(azimuthDegrees: Int) {
     Column {
-        Text("$azimuthDegrees")
+        Text("Phones compass, \n azimuth angle: $azimuthDegrees°")
     }
     Canvas(
         modifier = Modifier.size(200.dp),
@@ -215,9 +198,9 @@ fun DrawRotationVectorAzimuth(azimuthDegrees: Float) {
 }
 
 @Composable
-fun DrawRotationVectorPitch(pitchDegrees: Float) {
+fun DrawRotationVectorPitch(pitchDegrees: Int) {
     Column {
-        Text("$pitchDegrees")
+        Text("Phones pitch angle: $pitchDegrees°")
     }
     Canvas(
         modifier = Modifier.size(200.dp),
@@ -240,9 +223,9 @@ fun DrawRotationVectorPitch(pitchDegrees: Float) {
 }
 
 @Composable
-fun DrawRotationVectorRoll(rollDegrees: Float) {
+fun DrawRotationVectorRoll(rollDegrees: Int) {
     Column {
-        Text("$rollDegrees")
+        Text("Phones roll angle: $rollDegrees°")
     }
     Canvas(
         modifier = Modifier.size(200.dp),
