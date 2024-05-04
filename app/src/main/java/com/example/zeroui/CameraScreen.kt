@@ -1,5 +1,6 @@
 package com.example.zeroui
 
+import android.app.Activity
 import android.content.Context
 import android.util.Log
 import androidx.camera.core.*
@@ -24,6 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,6 +43,11 @@ import com.google.common.util.concurrent.ListenableFuture
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.face.FaceDetection
 import com.google.mlkit.vision.face.FaceDetectorOptions
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.time.withTimeoutOrNull
+import kotlinx.coroutines.withTimeoutOrNull
 
 @Composable
 fun CameraScreenView(navController: NavController) {
@@ -86,6 +93,26 @@ fun CameraScreenView(navController: NavController) {
 @Composable
 fun CameraScreen() {
     val faceState = remember { mutableStateOf(FaceState.NO_FACE) }
+    val context = LocalContext.current
+
+
+    LaunchedEffect(Unit) {
+        withTimeoutOrNull(10000) {
+            while (isActive) {
+                if (faceState.value != FaceState.NO_FACE) {
+
+
+
+                    cancel()
+                }
+                delay(1000)
+
+            }
+        } ?: run {
+            
+            (context as? Activity)?.finish()
+        }
+    }
 
     Column(modifier = Modifier.fillMaxSize()) {
         // Use a Box to wrap the CameraPreview and control its size
