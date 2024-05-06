@@ -101,6 +101,9 @@ fun CameraScreen(navController: NavController) {
     val timerForNoFace = remember { mutableStateOf(0) }  // Timer to count no-face detection
 
     LaunchedEffect(Unit) {
+        // Initialize a flag to determine if the app should close due to no face detection
+        var closeAppDueToNoFace = false
+
         withTimeoutOrNull(10000) {
             while (isActive) {
                 when (faceState.value) {
@@ -108,7 +111,7 @@ fun CameraScreen(navController: NavController) {
                         if (timerForClosedEyes.value >= 5) {
                             // If eyes have been closed for 5 seconds, navigate to the front view
                             navController.navigate("Front View")
-                            cancel()  // Stop the coroutine
+                            cancel()  // Stop the coroutine and don't check further
                         }
                         timerForClosedEyes.value += 1  // Increment the closed-eye timer
                     }
@@ -120,19 +123,20 @@ fun CameraScreen(navController: NavController) {
                         timerForClosedEyes.value = 0  // Reset the closed-eye timer if no face is detected
                         timerForNoFace.value += 1     // Increment no-face timer
                         if (timerForNoFace.value >= 10) {
-                            sharedPreferences.edit().putBoolean("CloseOnLaunch", true).apply()
-                            (context as? Activity)?.finish()  // Close the app if no face is detected for 10 seconds
-                            cancel()  // Stop the coroutine
+                            closeAppDueToNoFace = true
+                            break  // Break the loop and proceed to close the app
                         }
                     }
                 }
                 delay(1000)
             }
-        } ?: run {
-            if (timerForNoFace.value < 10) {
-                // Only reset the CloseOnLaunch if the loop was not stopped by no-face condition
-                sharedPreferences.edit().putBoolean("CloseOnLaunch", false).apply()
-            }
+        }
+
+        if (closeAppDueToNoFace) {
+            sharedPreferences.edit().putBoolean("CloseOnLaunch", true).apply()
+            (context as? Activity)?.finish()  // Close the app as no face was detected for 10 seconds
+        } else {
+            sharedPreferences.edit().putBoolean("CloseOnLaunch", false).apply()
         }
     }
 
@@ -160,6 +164,7 @@ fun CameraScreen(navController: NavController) {
         }
     }
 }
+
 
 
 
