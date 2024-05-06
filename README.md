@@ -23,13 +23,11 @@ There are currently seven recognized hand signs implemented. <br>
 
 # Screenshots
 
-<img src= "" width="250" height="500">
-<img src= "" width="250" height="500"> <br>
-<img src= "" width="250" height="500">
-<img src= "" width="250" height="500"> <br>
-<img src= "" width="250" height="500">
-<img src= "" width="250" height="500"> <br>
-<img src= "" width="250" height="500"> 
+<img src= "https://github.com/RiQhy/ZeroUI/blob/main/app/src/main/res/drawable/Screenshot_20240506_190446_ZeroUi.jpg" width="250" height="500">
+<img src= "https://github.com/RiQhy/ZeroUI/blob/main/app/src/main/res/drawable/Screenshot_20240506_190456_ZeroUi.jpg" width="250" height="500"> <br>
+<img src= "https://github.com/RiQhy/ZeroUI/blob/main/app/src/main/res/drawable/Screenshot_20240506_190426_ZeroUi.jpg" width="250" height="500">
+<img src= "https://github.com/RiQhy/ZeroUI/blob/main/app/src/main/res/drawable/Screenshot_20240506_190547_ZeroUi.jpg" width="250" height="500"> <br>
+<img src= "https://github.com/RiQhy/ZeroUI/blob/main/app/src/main/res/drawable/Screenshot_20240506_190515_ZeroUi.jpg" width="250" height="500">
 
 
 # Team
