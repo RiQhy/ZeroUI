@@ -85,35 +85,47 @@ fun CameraScreenView(navController: NavController) {
                     .padding(horizontal = 16.dp) // Apply additional horizontal padding if needed
             ) {
                 CameraPermissionHandler()
-                CameraScreen()
+                CameraScreen(navController)
             }
         }
     }
 }
 @Composable
-fun CameraScreen() {
+fun CameraScreen(navController: NavController) {
     val context = LocalContext.current
     val sharedPreferences = remember {
         context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
     }
     val faceState = remember { mutableStateOf(FaceState.NO_FACE) }
+    val timerForClosedEyes = remember { mutableStateOf(0) }  // Timer to count closed-eye duration
 
     LaunchedEffect(Unit) {
-
         val shouldClose = withTimeoutOrNull(10000) {
             while (isActive) {
-                if (faceState.value != FaceState.NO_FACE) {
-                    sharedPreferences.edit().putBoolean("CloseOnLaunch", false).apply()
-                    cancel()
+                when (faceState.value) {
+                    FaceState.FACE_CLOSED_EYES -> {
+                        if (timerForClosedEyes.value >= 5) {
+                            // If eyes have been closed for 5 seconds, navigate to the front view
+                            navController.navigate("Front View")
+                            cancel()
+                        }
+                        timerForClosedEyes.value += 1  // Increment the closed-eye timer
+                    }
+                    FaceState.FACE_OPEN_EYES -> {
+                        timerForClosedEyes.value = 0  // Reset the timer when eyes are open
+                    }
+                    FaceState.NO_FACE -> {
+                        timerForClosedEyes.value = 0  // Reset the timer if no face is detected
+                    }
                 }
                 delay(1000)
             }
-            false
-        } ?: true  //
+            false  // Return false if face is detected or the loop is canceled
+        } ?: true  // Return true if the 10-second period expired without interruption
 
         if (shouldClose) {
             sharedPreferences.edit().putBoolean("CloseOnLaunch", true).apply()
-            (context as? Activity)?.finish() 
+            (context as? Activity)?.finish()
         } else {
             sharedPreferences.edit().putBoolean("CloseOnLaunch", false).apply()
         }
@@ -143,6 +155,8 @@ fun CameraScreen() {
         }
     }
 }
+
+
 
 
 
