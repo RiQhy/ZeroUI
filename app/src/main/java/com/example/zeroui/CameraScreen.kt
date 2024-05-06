@@ -98,36 +98,41 @@ fun CameraScreen(navController: NavController) {
     }
     val faceState = remember { mutableStateOf(FaceState.NO_FACE) }
     val timerForClosedEyes = remember { mutableStateOf(0) }  // Timer to count closed-eye duration
+    val timerForNoFace = remember { mutableStateOf(0) }  // Timer to count no-face detection
 
     LaunchedEffect(Unit) {
-        val shouldClose = withTimeoutOrNull(10000) {
+        withTimeoutOrNull(10000) {
             while (isActive) {
                 when (faceState.value) {
                     FaceState.FACE_CLOSED_EYES -> {
                         if (timerForClosedEyes.value >= 5) {
                             // If eyes have been closed for 5 seconds, navigate to the front view
                             navController.navigate("Front View")
-                            cancel()
+                            cancel()  // Stop the coroutine
                         }
                         timerForClosedEyes.value += 1  // Increment the closed-eye timer
                     }
                     FaceState.FACE_OPEN_EYES -> {
                         timerForClosedEyes.value = 0  // Reset the timer when eyes are open
+                        timerForNoFace.value = 0     // Reset no-face timer when face is detected
                     }
                     FaceState.NO_FACE -> {
-                        timerForClosedEyes.value = 0  // Reset the timer if no face is detected
+                        timerForClosedEyes.value = 0  // Reset the closed-eye timer if no face is detected
+                        timerForNoFace.value += 1     // Increment no-face timer
+                        if (timerForNoFace.value >= 10) {
+                            sharedPreferences.edit().putBoolean("CloseOnLaunch", true).apply()
+                            (context as? Activity)?.finish()  // Close the app if no face is detected for 10 seconds
+                            cancel()  // Stop the coroutine
+                        }
                     }
                 }
                 delay(1000)
             }
-            false  // Return false if face is detected or the loop is canceled
-        } ?: true  // Return true if the 10-second period expired without interruption
-
-        if (shouldClose) {
-            sharedPreferences.edit().putBoolean("CloseOnLaunch", true).apply()
-            (context as? Activity)?.finish()
-        } else {
-            sharedPreferences.edit().putBoolean("CloseOnLaunch", false).apply()
+        } ?: run {
+            if (timerForNoFace.value < 10) {
+                // Only reset the CloseOnLaunch if the loop was not stopped by no-face condition
+                sharedPreferences.edit().putBoolean("CloseOnLaunch", false).apply()
+            }
         }
     }
 
@@ -155,6 +160,7 @@ fun CameraScreen(navController: NavController) {
         }
     }
 }
+
 
 
 
