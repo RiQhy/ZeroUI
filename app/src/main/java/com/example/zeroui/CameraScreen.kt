@@ -100,7 +100,7 @@ fun CameraScreen(navController: NavController) {
     val timerForClosedEyes = remember { mutableStateOf(0) }  // Timer to count closed-eye duration
 
     LaunchedEffect(Unit) {
-        val shouldClose = withTimeoutOrNull(10000) {
+        val shouldClose = withTimeoutOrNull(30000) {
             while (isActive) {
                 when (faceState.value) {
                     FaceState.FACE_CLOSED_EYES -> {
@@ -118,7 +118,7 @@ fun CameraScreen(navController: NavController) {
                         timerForClosedEyes.value = 0  // Reset the timer if no face is detected
                     }
                 }
-                delay(1000)
+                delay(30000)
             }
             false  // Return false if face is detected or the loop is canceled
         } ?: true  // Return true if the 10-second period expired without interruption
