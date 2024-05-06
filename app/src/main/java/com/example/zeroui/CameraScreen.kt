@@ -118,7 +118,7 @@ fun CameraScreen(navController: NavController) {
                         timerForClosedEyes.value = 0  // Reset the timer if no face is detected
                     }
                 }
-                delay(30000)
+                delay(1000)
             }
             false  // Return false if face is detected or the loop is canceled
         } ?: true  // Return true if the 10-second period expired without interruption

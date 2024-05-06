@@ -25,13 +25,6 @@ import com.example.zeroui.ui.theme.ZeroUITheme
 
 
 class MainActivity : ComponentActivity() {
-    private val requestPermissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
-            if (!isGranted) {
-                // Inform the user that the permission is needed.
-            }
-        }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -87,41 +80,39 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
-
-    @OptIn(ExperimentalAnimationApi::class)
-    @Composable
-    fun Navigation(context: Context) {
-        val navController = rememberNavController()
-        NavHost(navController = navController, startDestination = "Front View") {
-            composable("Front View") {
-                FrontViewPage(
-                    onGazeClick = { navController.navigate("CameraScreen") },
-                    onGestureClick = { fragmentActivity(context) },
-                    onMotionClick = { navController.navigate("Motion Sensors") },
-                )
-            }
-            composable("Motion Sensors") { MotionSensorView(navController) }
-            composable("CameraScreen") { CameraScreenView(navController) }
-            //composable("") {  }
-        }
-    }
-
-    fun fragmentActivity(context: Context) {
-        val intent = Intent(context, MainActivity2::class.java)
-        context.startActivity(intent)
-    }
-
-    @OptIn(ExperimentalAnimationApi::class)
-    @Preview(showBackground = true)
-    @Composable
-    fun GreetingPreview() {
-        ZeroUITheme {
+}
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+fun Navigation(context: Context) {
+    val navController = rememberNavController()
+    NavHost(navController = navController, startDestination = "Front View") {
+        composable("Front View") {
             FrontViewPage(
-                onGazeClick = {},
-                onGestureClick = {},
-                onMotionClick = {},
+                onGazeClick = { navController.navigate("CameraScreen") },
+                onGestureClick = { fragmentActivity(context) },
+                onMotionClick = { navController.navigate("Motion Sensors") },
             )
         }
+        composable("Motion Sensors") { MotionSensorView(navController) }
+        composable("CameraScreen") { CameraScreenView(navController) }
+        //composable("") {  }
+    }
+}
+
+fun fragmentActivity(context: Context) {
+    val intent = Intent(context, MainActivity2::class.java)
+    context.startActivity(intent)
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+@Preview(showBackground = true)
+@Composable
+fun GreetingPreview() {
+    ZeroUITheme {
+        FrontViewPage(
+            onGazeClick = {},
+            onGestureClick = {},
+            onMotionClick = {},
+        )
     }
 }
