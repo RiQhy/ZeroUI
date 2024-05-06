@@ -92,42 +92,45 @@ fun CameraScreenView(navController: NavController) {
 }
 @Composable
 fun CameraScreen() {
-    val faceState = remember { mutableStateOf(FaceState.NO_FACE) }
     val context = LocalContext.current
-
+    val sharedPreferences = remember {
+        context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
+    }
+    val faceState = remember { mutableStateOf(FaceState.NO_FACE) }
 
     LaunchedEffect(Unit) {
-        withTimeoutOrNull(10000) {
+
+        val shouldClose = withTimeoutOrNull(10000) {
             while (isActive) {
                 if (faceState.value != FaceState.NO_FACE) {
-
-
-
+                    sharedPreferences.edit().putBoolean("CloseOnLaunch", false).apply()
                     cancel()
                 }
                 delay(1000)
-
             }
-        } ?: run {
-            
-            (context as? Activity)?.finish()
+            false
+        } ?: true  //
+
+        if (shouldClose) {
+            sharedPreferences.edit().putBoolean("CloseOnLaunch", true).apply()
+            (context as? Activity)?.finish() 
+        } else {
+            sharedPreferences.edit().putBoolean("CloseOnLaunch", false).apply()
         }
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
-        // Use a Box to wrap the CameraPreview and control its size
         Box(
             modifier = Modifier
-                .weight(1f)  // Adjust the weight to control the size
+                .weight(1f)
                 .fillMaxWidth()
         ) {
             CameraPreview(faceState)
         }
 
-        // Color-changing box below the camera preview
         Box(
             modifier = Modifier
-                .weight(1f)  // Adjust the weight to control the size
+                .weight(1f)
                 .fillMaxWidth()
                 .background(
                     color = when (faceState.value) {
@@ -140,6 +143,9 @@ fun CameraScreen() {
         }
     }
 }
+
+
+
 
 
 enum class FaceState {
